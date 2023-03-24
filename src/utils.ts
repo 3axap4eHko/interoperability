@@ -36,9 +36,9 @@ export const forceExtension = (module: swc.Program, extenstion: string) => {
         if (node.expression.type === 'StringLiteral') {
           setNodeExtension(node.expression, extenstion);
         }
-        return;
+      } else if (node.source?.type === 'StringLiteral') {
+        setNodeExtension(node.source, extenstion);
       }
-      setNodeExtension(node.source, extenstion);
     }
   }
   return module;
@@ -100,7 +100,7 @@ export const compile = async (sourceFile: string, destinationFile: string, confi
 
   await Fs.mkdir(Path.dirname(destinationFile), { recursive: true });
   await Fs.writeFile(destinationFile, `${output.code}\n//# sourceMappingURL=${Path.basename(destinationMapFile)}\n`);
-  const map = JSON.parse(output.map);
+  const map = JSON.parse(output.map || '');
   map.sources[0] = Path.relative(Path.dirname(destinationFile), sourceFile);
   await Fs.writeFile(destinationMapFile, JSON.stringify(map));
 }
