@@ -1,6 +1,6 @@
-import * as Path from 'path';
-import * as Fs from 'fs/promises';
-import * as glob from 'fast-glob';
+import Path from 'path';
+import Fs from 'fs/promises';
+import glob from 'fast-glob';
 import { Command } from 'commander';
 import { compile, patchCJS, patchMJS, isLocalFile, fileExists } from './utils';
 // @ts-ignore

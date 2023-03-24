@@ -17,9 +17,9 @@ export const isFileExportImport = (node: swc.ModuleItem | swc.Statement): node i
     case 'ExportAllDeclaration':
     case 'ExportNamedDeclaration':
     case 'ImportDeclaration':
-      return node.source?.type === 'StringLiteral' && isLocalFile.test(node.source.value);
+      return node.source?.type === 'StringLiteral' && Path.extname(node.source.value) === '' && isLocalFile.test(node.source.value);
     case 'ExportDefaultExpression':
-      return node.expression?.type === 'StringLiteral' && isLocalFile.test(node.expression.value);
+      return node.expression?.type === 'StringLiteral' && Path.extname(node.expression.value) === '' && isLocalFile.test(node.expression.value);
   }
   return false;
 };
@@ -100,7 +100,9 @@ export const compile = async (sourceFile: string, destinationFile: string, confi
 
   await Fs.mkdir(Path.dirname(destinationFile), { recursive: true });
   await Fs.writeFile(destinationFile, `${output.code}\n//# sourceMappingURL=${Path.basename(destinationMapFile)}\n`);
-  await Fs.writeFile(destinationMapFile, output.map);
+  const map = JSON.parse(output.map);
+  map.sources[0] = Path.relative(Path.dirname(destinationFile), sourceFile);
+  await Fs.writeFile(destinationMapFile, JSON.stringify(map));
 }
 
 
