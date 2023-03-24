@@ -1,0 +1,33 @@
+name: CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
+
+      - name: Environment log
+        id: env
+        run: |
+          node --version
+          yarn --version
+
+      - name: Install dependecies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Run build process
+        run: |
+          yarn build
