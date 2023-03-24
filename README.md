@@ -1,6 +1,6 @@
 # Interopability
 
-[SWC](https://www.npmjs.com/package/@swc/core) based tool, helps to compile Interopabe TypeScript code to ESM and CommonJS modules
+[SWC](https://www.npmjs.com/package/@swc/core) based tool, helps to compile TypeScript code to ESM and CommonJS Interopabe modules.
 
 [![Build Status][github-image]][github-url]
 [![NPM version][npm-image]][npm-url]
@@ -8,11 +8,11 @@
 
 ## Usage
 
-Just run build directory with ignore patterns
+Just run build directory
 ```bash
-npx inop src build -i __tests__ -i __mocks__
+npx inop src build
 ```
-and adjust `package.json`
+and adjust `package.json` as following
 ```json
 {
   ...
@@ -29,6 +29,23 @@ and adjust `package.json`
 }
 ```
 
+As for module declarations and typechecking use the following command, since swc does not support them yet
+```bash
+tsc --declaration --emitDeclarationOnly
+```
+
+## Help
+```
+Arguments:
+  source                    source directory
+  build                     build directory
+
+Options:
+  -V, --version             output the version number
+  -s, --swcrc <swcrc>       swcrc path (default: "./.swcrc")
+  -i, --ignore [ignore...]  ignore patterns
+  -h, --help                display help for command
+```
 
 ## License
 
@@ -39,5 +56,5 @@ Copyright (c) 2023-present Ivan Zakharchanka
 [npm-url]: https://www.npmjs.com/package/inop
 [downloads-image]: https://img.shields.io/npm/dw/inop.svg?maxAge=43200
 [npm-image]: https://img.shields.io/npm/v/inop.svg?maxAge=43200
-[github-url]: https://github.com/3axap4eHko/inop/actions/workflows/cicd.yml
-[github-image]: https://github.com/3axap4eHko/inop/actions/workflows/cicd.yml/badge.svg
+[github-url]: https://github.com/3axap4eHko/interoperability/actions/workflows/cicd.yml
+[github-image]: https://github.com/3axap4eHko/interoperability/actions/workflows/cicd.yml/badge.svg
