@@ -1,6 +1,6 @@
 {
   "name": "inop",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "SWC based tool, helps to compile TypeScript mdoules to Interopabe ESM and CommonJS modules",
   "main": "build/index.js",
   "bin": {
