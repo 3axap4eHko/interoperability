@@ -6,6 +6,12 @@ export const isLocalFile = /^\.{0,2}\//;
 
 type ExportImportDeclaration = swc.ExportAllDeclaration | swc.ExportNamedDeclaration | swc.ImportDeclaration | swc.ExportDefaultExpression;
 
+const not = (value : unknown) => !value;
+
+export const fileExists = (filename: string) => {
+  return Fs.access(filename, Fs.constants.R_OK).catch(Boolean).then(not);
+}
+
 export const isFileExportImport = (node: swc.ModuleItem | swc.Statement): node is ExportImportDeclaration => {
   switch(node.type) {
     case 'ExportAllDeclaration':

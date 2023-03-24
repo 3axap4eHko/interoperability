@@ -2,7 +2,7 @@ import * as Path from 'path';
 import * as Fs from 'fs/promises';
 import * as glob from 'fast-glob';
 import { Command } from 'commander';
-import { compile, patchCJS, patchMJS, isLocalFile } from './utils';
+import { compile, patchCJS, patchMJS, isLocalFile, fileExists } from './utils';
 // @ts-ignore
 import { name, description, version } from '../package.json';
 
@@ -34,8 +34,8 @@ commander
   .option('-s, --swcrc <swcrc>', 'swcrc path', './.swcrc')
   .option('-i, --ignore [ignore...]', 'ignore patterns')
   .action(async (source: string, build: string, options: Options) => {
-    const swcrc = isLocalFile.test(options.swcrc) ? Path.resolve(options.swcrc) : options.swcrc;
-    const swcrcConfig = swcrc ? JSON.parse(await Fs.readFile(swcrc, 'utf-8')) : defaultSwcrc;
+    const swcrcFilepath = isLocalFile.test(options.swcrc) ? Path.resolve(options.swcrc) : options.swcrc;
+    const swcrcConfig = await fileExists(swcrcFilepath) ? JSON.parse(await Fs.readFile(swcrcFilepath, 'utf-8')) : defaultSwcrc;
     const swcrcCJS = patchCJS(swcrcConfig);
     const swcrcMJS = patchMJS(swcrcConfig);
 
