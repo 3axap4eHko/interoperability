@@ -1,7 +1,7 @@
 {
   "name": "inop",
   "version": "0.0.8",
-  "description": "SWC based tool, helps to compile TypeScript mdoules to Interopabe ESM and CommonJS modules",
+  "description": "SWC based tool, helps to compile TypeScript modules to Interoperable ESM and CommonJS modules",
   "main": "build/index.js",
   "bin": {
     "inop": "bin/inop"
@@ -35,7 +35,7 @@
     "esm",
     "commonjs",
     "interop",
-    "interopability"
+    "interoperability"
   ],
   "dependencies": {
     "@swc/cli": "^0.1.62",

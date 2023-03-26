@@ -1,6 +1,6 @@
-# Interopability
+# Interoperability
 
-[SWC](https://www.npmjs.com/package/@swc/core) based tool, helps to compile TypeScript code to ESM and CommonJS Interopabe modules.
+[SWC](https://www.npmjs.com/package/@swc/core) based tool, helps to compile TypeScript code to ESM and CommonJS Interoperable modules.
 
 [![Build Status][github-image]][github-url]
 [![NPM version][npm-image]][npm-url]
