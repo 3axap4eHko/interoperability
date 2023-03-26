@@ -24,20 +24,20 @@ export const isFileExportImport = (node: swc.ModuleItem | swc.Statement): node i
   return false;
 };
 
-export const setNodeExtension = (node: swc.StringLiteral, extenstion: string) => {
-  node.value = `${node.value}.${extenstion}`;
+export const setNodeExtension = (node: swc.StringLiteral, extension: string) => {
+  node.value = `${node.value}.${extension}`;
   node.raw = JSON.stringify(node.value);
 };
 
-export const forceExtension = (module: swc.Program, extenstion: string) => {
+export const forceExtension = (module: swc.Program, extension: string) => {
   for (const node of module.body) {
     if (isFileExportImport(node)) {
       if (node.type === 'ExportDefaultExpression') {
         if (node.expression.type === 'StringLiteral') {
-          setNodeExtension(node.expression, extenstion);
+          setNodeExtension(node.expression, extension);
         }
       } else if (node.source?.type === 'StringLiteral') {
-        setNodeExtension(node.source, extenstion);
+        setNodeExtension(node.source, extension);
       }
     }
   }
