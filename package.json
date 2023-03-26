@@ -44,6 +44,6 @@
     "fast-glob": "^3.2.12"
   },
   "devDependencies": {
-    "@types/node": "^18.15.6"
+    "@types/node": "^18.15.10"
   }
 }
