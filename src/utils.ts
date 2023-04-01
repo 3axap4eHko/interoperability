@@ -184,6 +184,6 @@ export const transformCommand = async (source: string, build: string, options: T
       sideEffects: false,
       ...rest,
     };
-    await writeJSON(packageJSONPath+'.json', packageJSON)
+    await writeJSON(packageJSONPath, packageJSON)
   }
 };
