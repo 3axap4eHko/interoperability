@@ -7,7 +7,8 @@
     "inop": "bin/inop"
   },
   "scripts": {
-    "build": "rm -rf build && swc ./src -d build"
+    "build": "rm -rf build && swc ./src -d build && rm -rf build/__tests__",
+    "test": "jest"
   },
   "engines": {
     "node": ">=16"
@@ -44,6 +45,9 @@
     "fast-glob": "^3.2.12"
   },
   "devDependencies": {
-    "@types/node": "^18.15.10"
+    "@swc/jest": "^0.2.24",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.10",
+    "jest": "^29.5.0"
   }
 }

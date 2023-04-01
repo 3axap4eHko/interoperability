@@ -12,7 +12,8 @@ Just run build directory
 ```bash
 npx inop src build
 ```
-and adjust `package.json` as following
+
+Use option `-p` to adjust `package.json` with following changes
 ```json
 {
   ...
@@ -37,14 +38,20 @@ tsc --declaration --emitDeclarationOnly
 ## Help
 ```
 Arguments:
-  source                    source directory
-  build                     build directory
+  source                         source directory
+  build                          build directory
 
 Options:
-  -V, --version             output the version number
-  -s, --swcrc <swcrc>       swcrc path (default: "./.swcrc")
-  -i, --ignore [ignore...]  ignore patterns
-  -h, --help                display help for command
+  -V, --version                  output the version number
+  -m, --match <match>            files match pattern (default: "**/*.ts")
+  -s, --swcrc <swcrc>            swcrc path (default: ".swcrc")
+  -i, --ignore [ignore...]       ignore patterns
+  -p, --package                  adjust package.json according to main property
+  --commonjs-ext [commonjs-ext]  file extension of CommonJS files (default: ".cjs")
+  --esm-ext [esm-ext]            file extension of ESM files (default: ".js")
+  --skip-commonjs                do not generate CommonJS files
+  --skip-esm                     do not generate ESM files
+  -h, --help                     display help for command
 ```
 
 ## License
