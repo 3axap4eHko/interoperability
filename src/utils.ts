@@ -20,7 +20,7 @@ export const writeJSON = async (filename: string, data: unknown, indent = 2) => 
 }
 
 export const hasFilePath = (node: swc.ModuleItem | swc.Statement): node is ExportImportDeclaration => {
-  switch(node.type) {
+  switch (node.type) {
     case 'ExportAllDeclaration':
     case 'ExportNamedDeclaration':
     case 'ImportDeclaration':
@@ -133,6 +133,27 @@ const defaultSwcrc = {
   },
 };
 
+export const patchPackageJSON = async ({ name, version, description, main }: Record<string, string>, buildDir: string, sourceDir: string, sourceFiles: string[], options: TransformCommandOptions) => {
+  const mainFile = Path.parse(main);
+  return {
+    name,
+    description,
+    version,
+    type: 'module',
+    types: Path.format({ ...mainFile, base: '', ext: '.d.ts' }),
+    main: Path.format({ ...mainFile, base: '', ext: options.commonjsExt }),
+    module: Path.format({ ...mainFile, base: '', ext: options.esmExt }),
+    exports: {
+      require: Path.format({ ...mainFile, dir: `./${mainFile.dir}`, base: '', ext: options.commonjsExt }),
+      import: Path.format({ ...mainFile, dir: `./${mainFile.dir}`, base: '', ext: options.esmExt }),
+    },
+    files: [
+      Path.relative(process.cwd(), buildDir),
+      ...sourceFiles.map(file => Path.relative(process.cwd(), `${sourceDir}/${file}`)),
+    ],
+  };
+};
+
 export const transformCommand = async (source: string, build: string, options: TransformCommandOptions) => {
   const swcrcFilepath = isLocalFile.test(options.swcrc) ? Path.resolve(options.swcrc) : options.swcrc;
   const swcrcConfig = await fileNotExist(swcrcFilepath) ? defaultSwcrc : await readJSON(swcrcFilepath);
@@ -163,27 +184,13 @@ export const transformCommand = async (source: string, build: string, options: T
     if (await fileNotExist(packageJSONPath)) {
       throw new Error(`File package.json not found at ${packageJSONPath}`);
     }
+
     const { name, version, description, main, ...rest } = await readJSON(packageJSONPath);
     if (await fileNotExist(main)) {
       throw new Error(`File ${main} not found`);
     }
 
-    const mainFile = Path.parse(main);
-    const packageJSON = {
-      name,
-      description,
-      version,
-      type: 'module',
-      main,
-      module: Path.format({ ...mainFile, base: '', ext: options.esmExt }),
-      types: Path.format({ ...mainFile, base: '', ext: '.d.ts' }),
-      files: [
-        Path.relative(process.cwd(), buildDir),
-        ...sourceFiles.map(file => Path.relative(process.cwd(), `${sourceDir}/${file}`)),
-      ],
-      sideEffects: false,
-      ...rest,
-    };
-    await writeJSON(packageJSONPath, packageJSON)
+    const patchedPackageJSON = await patchPackageJSON({ name, version, description, main }, buildDir, sourceDir, sourceFiles, options);
+    await writeJSON(packageJSONPath, { ...patchedPackageJSON, ...rest });
   }
 };

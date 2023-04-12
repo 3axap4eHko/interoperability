@@ -19,13 +19,16 @@ Use option `-p` to adjust `package.json` with following changes
   ...
   "type": "module",
   "main": "build/index.cjs",
+  "module": "build/index.js",
   "types": "build/index.d.ts",
+  "exports": {
+    "require": "./build/index.cjs",
+    "import": "./build/index.js"
+  },
   "files": [ //list build directory and sources for sourceMap
     "build",
     "src/index.ts"
   ],
-  "module": "build/index.js",
-  "sideEffects": false,
   ...
 }
 ```

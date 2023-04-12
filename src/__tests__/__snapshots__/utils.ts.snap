@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hasFilePath test suite should patch json file 1`] = `
+{
+  "description": "description",
+  "exports": {
+    "import": "./build/index/mjs",
+    "require": "./build/index.cjs",
+  },
+  "files": [
+    "build",
+    "source/index.ts",
+    "source/test.ts",
+  ],
+  "main": "build/index.cjs",
+  "module": "build/index/mjs",
+  "name": "name",
+  "type": "module",
+  "types": "build/index.d.ts",
+  "version": "1.0.0",
+}
+`;

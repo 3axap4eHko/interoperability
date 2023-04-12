@@ -1,8 +1,10 @@
+import * as Path from 'path';
 import * as swc from '@swc/core';
 import {
   isLocalFile,
   fileNotExist,
   hasFilePath,
+  patchPackageJSON,
 } from '../utils';
 
 import * as Fs from 'fs/promises';
@@ -29,7 +31,6 @@ describe('isLocalFile test suite', () => {
 describe('fileNotExist test suite', () => {
   it('should check if file does not exist', async () => {
     const access = Fs.access as jest.MockedFunction<typeof Fs.access>;
-    console.log(access.mockRejectedValue);
     access.mockRejectedValue('error');
     await expect(fileNotExist('test')).resolves.toBeTruthy();
     access.mockResolvedValue(undefined);
@@ -68,5 +69,20 @@ describe('hasFilePath test suite', () => {
     { type: 'ExportDefaultExpression', expression: moduleStringLiteral, span },
   ] as (swc.ModuleItem | swc.Statement)[])('should detect if node $type has a file path', (node) => {
     expect(hasFilePath(node)).toEqual(false);
+  });
+
+  it ('should patch json file', async () => {
+    const options = {
+      match: '',
+      swcrc: '',
+      ignore: [''],
+      commonjsExt: '.cjs',
+      skipCommonjs: false,
+      esmExt: '/mjs',
+      skipEsm: false,
+    };
+    const packageJSON = { name: 'name', version: '1.0.0', description: 'description', main: 'build/index.js' };
+    const patchedJSON = await patchPackageJSON(packageJSON, Path.resolve('build'), Path.resolve('source'), ['index.ts', 'test.ts'], options);
+    expect(patchedJSON).toMatchSnapshot();
   });
 });
