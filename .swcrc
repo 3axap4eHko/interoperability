@@ -1,6 +1,6 @@
 {
   "module": {
-    "type": "nodenext",
+    "type": "commonjs",
     "strict": true
   },
   "jsc": {
