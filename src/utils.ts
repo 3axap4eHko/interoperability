@@ -16,7 +16,7 @@ export const readJSON = async (filename: string) => {
 }
 
 export const writeJSON = async (filename: string, data: unknown, indent = 2) => {
-  return await Fs.writeFile(filename, JSON.stringify(data, null, indent));
+  return await Fs.writeFile(filename, JSON.stringify(data, null, indent) + '\n');
 }
 
 export const hasFilePath = (node: swc.ModuleItem | swc.Statement): node is ExportImportDeclaration => {
