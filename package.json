@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "type": "module",
   "bin": {
-    "inop": "bin/inop"
+    "inop": "bin/inop.js"
   },
   "scripts": {
     "build": "rm -rf build && swc ./src -d build && rm -rf build/__tests__",

@@ -1,8 +1,10 @@
 import { Command } from 'commander';
+import { Module } from 'module';
 import { transformCommand } from './utils.js';
-// @ts-ignore
-import packageJSON from '../package.json' assert { type: 'json' };
-const { name, description, version } = packageJSON;
+
+const require = Module.createRequire(import.meta.url);
+
+const { name, description, version } = require('../package.json');
 
 const commander = new Command();
 

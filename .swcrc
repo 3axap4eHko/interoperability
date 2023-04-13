@@ -1,12 +1,13 @@
 {
   "module": {
-    "type": "commonjs",
+    "type": "nodenext",
     "strict": true
   },
   "jsc": {
     "target": "esnext",
     "parser": {
-      "syntax": "typescript"
+      "syntax": "typescript",
+      "importAssertions": true
     }
   },
   "sourceMaps": true
