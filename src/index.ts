@@ -1,7 +1,8 @@
 import { Command } from 'commander';
-import { transformCommand } from './utils';
+import { transformCommand } from './utils.js';
 // @ts-ignore
-import { name, description, version } from '../package.json';
+import packageJSON from '../package.json' assert { type: 'json' };
+const { name, description, version } = packageJSON;
 
 const commander = new Command();
 

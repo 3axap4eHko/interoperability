@@ -1,11 +1,12 @@
 import * as Path from 'path';
 import * as Fs from 'fs/promises';
 import * as swc from '@swc/core';
+import { Visitor } from '@swc/core/Visitor.js';
 import glob from 'fast-glob';
 
 export const isLocalFile = /^(\.|\/)/;
 
-type ExportImportDeclaration = swc.ExportAllDeclaration | swc.ExportNamedDeclaration | swc.ImportDeclaration | swc.ExportDefaultExpression;
+export const RENAME_EXTENSION = ['', '.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'];
 
 export const fileNotExist = async (filename: string) => {
   return Fs.access(filename, Fs.constants.R_OK).catch(Boolean);
@@ -19,39 +20,39 @@ export const writeJSON = async (filename: string, data: unknown, indent = 2) => 
   return await Fs.writeFile(filename, JSON.stringify(data, null, indent) + '\n');
 }
 
-export const hasFilePath = (node: swc.ModuleItem | swc.Statement): node is ExportImportDeclaration => {
-  switch (node.type) {
-    case 'ExportAllDeclaration':
-    case 'ExportNamedDeclaration':
-    case 'ImportDeclaration':
-      return node.source?.type === 'StringLiteral' && Path.extname(node.source.value) === '' && isLocalFile.test(node.source.value);
-    case 'ExportDefaultExpression':
-      return node.expression?.type === 'StringLiteral' && Path.extname(node.expression.value) === '' && isLocalFile.test(node.expression.value);
-  }
-  return false;
-};
-
 export const setNodeExtension = (node: swc.StringLiteral, extension: string) => {
-  node.value = `${node.value}.${extension}`;
-  node.raw = JSON.stringify(node.value);
+  const path = Path.parse(node.value);
+  if (RENAME_EXTENSION.includes(path.ext)) {
+    node.value = Path.format({ ...path, base: '', ext: extension });
+    node.raw = JSON.stringify(node.value);
+  }
 };
 
-export const forceExtension = (module: swc.Program, extension: string) => {
-  for (const node of module.body) {
-    if (hasFilePath(node)) {
-      if (node.type === 'ExportDefaultExpression') {
-        if (node.expression.type === 'StringLiteral') {
-          setNodeExtension(node.expression, extension);
-        }
-      } else if (node.source?.type === 'StringLiteral') {
-        setNodeExtension(node.source, extension);
+export class ModuleVisitor extends Visitor {
+  constructor(public extension: string) {
+    super();
+  }
+
+  visitModuleDeclaration(decl: swc.ModuleDeclaration) {
+    if ('source' in decl) {
+      if (decl.source?.type === 'StringLiteral' && isLocalFile.test(decl.source.value)) {
+        setNodeExtension(decl.source, this.extension);
       }
     }
+    if ('expression' in decl) {
+      if (decl.expression?.type === 'StringLiteral' && isLocalFile.test(decl.expression.value)) {
+        setNodeExtension(decl.expression, this.extension);
+      }
+    }
+    return super.visitModuleDeclaration(decl);
   }
-  return module;
+  visitTsType(decl: swc.TsType){
+    return decl;
+  }
 }
 
-export const patchCJS = (config: swc.Config): Config => {
+export const patchCJS = (config: swc.Config, extension: string): Config => {
+  const visitor = new ModuleVisitor(extension);
   return {
     ...config,
     module: {
@@ -66,12 +67,13 @@ export const patchCJS = (config: swc.Config): Config => {
       }
     },
     plugin: (module: swc.Program) => {
-      forceExtension(module, 'cjs');
+      visitor.visitProgram(module);
       return module;
     },
   };
 };
-export const patchMJS = (config: swc.Config): Config => {
+export const patchMJS = (config: swc.Config, extension: string): Config => {
+  const visitor = new ModuleVisitor(extension);
   return {
     ...config,
     module: {
@@ -86,7 +88,7 @@ export const patchMJS = (config: swc.Config): Config => {
       }
     },
     plugin: (module: swc.Program) => {
-      forceExtension(module, 'js');
+      visitor.visitProgram(module);
       return module;
     },
   };
@@ -157,8 +159,8 @@ export const patchPackageJSON = async ({ name, version, description, main }: Rec
 export const transformCommand = async (source: string, build: string, options: TransformCommandOptions) => {
   const swcrcFilepath = isLocalFile.test(options.swcrc) ? Path.resolve(options.swcrc) : options.swcrc;
   const swcrcConfig = await fileNotExist(swcrcFilepath) ? defaultSwcrc : await readJSON(swcrcFilepath);
-  const swcrcCJS = patchCJS(swcrcConfig);
-  const swcrcMJS = patchMJS(swcrcConfig);
+  const swcrcCJS = patchCJS(swcrcConfig, options.commonjsExt);
+  const swcrcMJS = patchMJS(swcrcConfig, options.esmExt);
 
   const sourceDir = Path.resolve(source);
   const buildDir = Path.resolve(build);

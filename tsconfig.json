@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "rootDir": "src",
+    "outDir": "build"
+  },
+  "include": ["src/*.ts"],
+  "exclude": ["node_modules", "__tests__"]
+}
