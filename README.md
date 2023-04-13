@@ -38,6 +38,37 @@ As for module declarations and typechecking use the following command, since swc
 tsc --declaration --emitDeclarationOnly
 ```
 
+Here is the recommended `tsconfig.json`
+```json
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "ESNext",
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext",
+    ...
+  },
+  ...
+}
+```
+
+And `jest.config.js`
+```javascript
+export default {
+  ...
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '^.+\\.ts$': '@swc/jest',
+  },
+  ...
+};
+```
+
+
 ## Help
 ```
 Arguments:
