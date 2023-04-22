@@ -1,11 +1,9 @@
 import * as Path from 'path';
-import * as swc from '@swc/core';
 import {
   isLocalFile,
   fileNotExist,
-  hasFilePath,
   patchPackageJSON,
-} from '../utils';
+} from '../utils.js';
 
 import * as Fs from 'fs/promises';
 
@@ -38,39 +36,7 @@ describe('fileNotExist test suite', () => {
   });
 });
 
-describe('hasFilePath test suite', () => {
-  const span: swc.Span = {
-    start: 0,
-    end: 0,
-    ctxt: 0,
-  };
-  const localFileStringLiteral: swc.StringLiteral = {
-    type: 'StringLiteral',
-    value: './test',
-    span,
-  };
-  const moduleStringLiteral: swc.StringLiteral = {
-    type: 'StringLiteral',
-    value: 'test',
-    span,
-  };
-  it.each([
-    { type: 'ExportAllDeclaration', source: localFileStringLiteral, span },
-    { type: 'ExportNamedDeclaration', source: localFileStringLiteral, span },
-    { type: 'ImportDeclaration', source: localFileStringLiteral, span },
-    { type: 'ExportDefaultExpression', expression: localFileStringLiteral, span },
-  ] as (swc.ModuleItem | swc.Statement)[])('should detect if node $type has a file path', (node) => {
-    expect(hasFilePath(node)).toEqual(true);
-  });
-  it.each([
-    { type: 'ExportAllDeclaration', source: moduleStringLiteral, span },
-    { type: 'ExportNamedDeclaration', source: moduleStringLiteral, span },
-    { type: 'ImportDeclaration', source: moduleStringLiteral, span },
-    { type: 'ExportDefaultExpression', expression: moduleStringLiteral, span },
-  ] as (swc.ModuleItem | swc.Statement)[])('should detect if node $type has a file path', (node) => {
-    expect(hasFilePath(node)).toEqual(false);
-  });
-
+describe('patchPackageJSON test suite', () => {
   it ('should patch json file', async () => {
     const options = {
       match: '',

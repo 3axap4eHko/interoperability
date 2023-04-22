@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   verbose: true,
   collectCoverage: !!process.env.CI,
   collectCoverageFrom: ['src/**/*.ts'],
@@ -9,6 +9,10 @@ module.exports = {
     '__tests__',
   ],
   coverageDirectory: './coverage',
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   transform: {
     '^.+\\.ts$': '@swc/jest',
   },

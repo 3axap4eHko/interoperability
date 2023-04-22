@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hasFilePath test suite should patch json file 1`] = `
+exports[`patchPackageJSON test suite should patch json file 1`] = `
 {
   "description": "description",
   "exports": {
