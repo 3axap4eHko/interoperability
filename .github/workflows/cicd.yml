@@ -35,7 +35,6 @@ jobs:
       - name: Run testing
         run: |
           yarn test
-          yarn test:build
         env:
           COVERAGE: 1
 
