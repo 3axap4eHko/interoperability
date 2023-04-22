@@ -42,6 +42,7 @@ Here is the recommended `tsconfig.json`
 ```json
 {
   "compilerOptions": {
+    ...
     "target": "esnext",
     "module": "ESNext",
     "declaration": true,
@@ -53,10 +54,11 @@ Here is the recommended `tsconfig.json`
 }
 ```
 
-And `jest.config.js`
+And jest config `jest.config.js`
 ```javascript
 export default {
   ...
+  coverageProvider: 'v8',
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
@@ -67,7 +69,6 @@ export default {
   ...
 };
 ```
-
 
 ## Help
 ```

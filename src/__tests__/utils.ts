@@ -3,7 +3,7 @@ import {
   isLocalFile,
   fileNotExist,
   patchPackageJSON,
-} from '../utils.js';
+} from '../utils';
 
 import * as Fs from 'fs/promises';
 
