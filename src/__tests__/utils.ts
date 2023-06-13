@@ -44,7 +44,7 @@ describe('patchPackageJSON test suite', () => {
       ignore: [''],
       commonjsExt: '.cjs',
       skipCommonjs: false,
-      esmExt: '/mjs',
+      esmExt: '.mjs',
       skipEsm: false,
     };
     const packageJSON = { name: 'name', version: '1.0.0', description: 'description', main: 'build/index.js' };

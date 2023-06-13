@@ -4,7 +4,7 @@ exports[`patchPackageJSON test suite should patch json file 1`] = `
 {
   "description": "description",
   "exports": {
-    "import": "./build/index/mjs",
+    "import": "./build/index.mjs",
     "require": "./build/index.cjs",
   },
   "files": [
@@ -13,7 +13,7 @@ exports[`patchPackageJSON test suite should patch json file 1`] = `
     "source/test.ts",
   ],
   "main": "build/index.cjs",
-  "module": "build/index/mjs",
+  "module": "build/index.mjs",
   "name": "name",
   "type": "module",
   "types": "build/index.d.ts",
