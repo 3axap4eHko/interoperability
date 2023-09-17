@@ -7,6 +7,6 @@ export class A {
 
   constructor(public value: number){
     assert.equal(typeof value, 'number');
-    glob('');
+    glob('*');
   }
 }

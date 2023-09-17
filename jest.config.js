@@ -14,6 +14,7 @@ export default {
     '__tests__',
   ],
   coverageDirectory: './coverage',
+  testMatch: ['<rootDir>/src/**/__tests__/**/*.ts'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
