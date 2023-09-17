@@ -18,6 +18,7 @@ commander
   .option('-s, --swcrc <swcrc>', 'swcrc path', '.swcrc')
   .option('-i, --ignore [ignore...]', 'ignore patterns')
   .option('-p, --package', 'adjust package.json according to main property')
+  .option('-c, --copy', 'copy package.json to build directory with optimized dependencies')
   .option('--commonjs-ext [commonjs-ext]', 'file extension of CommonJS files', '.cjs')
   .option('--esm-ext [esm-ext]', 'file extension of ESM files', '.js')
   .option('--skip-commonjs', 'do not generate CommonJS files')

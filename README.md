@@ -33,6 +33,11 @@ Use option `-p` to adjust `package.json` with following changes
 }
 ```
 
+Use option `-i` to ignore specific patterns
+```bash
+npx inop src build -i __tests__ -i __mocks__
+```
+
 As for module declarations and typechecking use the following command, since swc does not support them yet
 ```bash
 tsc --declaration --emitDeclarationOnly
@@ -43,11 +48,11 @@ Here is the recommended `tsconfig.json`
 {
   "compilerOptions": {
     ...
-    "target": "esnext",
-    "module": "ESNext",
+    "target": "ESNext",
+    "module": "NodeNext",
     "declaration": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     ...
   },
   ...

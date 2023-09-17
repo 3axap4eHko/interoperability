@@ -29,14 +29,24 @@ export const setNodeExtension = (node: swc.StringLiteral, extension: string) => 
 };
 
 export class ModuleVisitor extends Visitor {
+  public readonly modules = new Set<string>();
+
   constructor(public extension: string) {
     super();
   }
 
   visitModuleDeclaration(decl: swc.ModuleDeclaration) {
     if ('source' in decl) {
-      if (decl.source?.type === 'StringLiteral' && isLocalFile.test(decl.source.value)) {
-        setNodeExtension(decl.source, this.extension);
+      if (decl.source?.type === 'StringLiteral') {
+        if (isLocalFile.test(decl.source.value)) {
+          setNodeExtension(decl.source, this.extension);
+        } else {
+          const moduleName = decl.source.value.split('/').slice(
+            0,
+            decl.source.value.startsWith('@') ? 2 : 1,
+          ).join('/');
+          this.modules.add(moduleName);
+        }
       }
     }
     if ('expression' in decl) {
@@ -46,16 +56,16 @@ export class ModuleVisitor extends Visitor {
     }
     return super.visitModuleDeclaration(decl);
   }
-  visitTsType(decl: swc.TsType){
+  visitTsType(decl: swc.TsType) {
     return decl;
   }
 }
 
-export const patchCJS = (config: swc.Config, extension: string): Config => {
-  const visitor = new ModuleVisitor(extension);
+export const patchCJS = (config: swc.Config, visitor: ModuleVisitor): Config => {
   return {
     ...config,
     module: {
+      strict: true,
       ...config?.module,
       type: 'commonjs',
     },
@@ -72,8 +82,7 @@ export const patchCJS = (config: swc.Config, extension: string): Config => {
     },
   };
 };
-export const patchMJS = (config: swc.Config, extension: string): Config => {
-  const visitor = new ModuleVisitor(extension);
+export const patchMJS = (config: swc.Config, visitor: ModuleVisitor): Config => {
   return {
     ...config,
     module: {
@@ -123,15 +132,18 @@ interface TransformCommandOptions {
   esmExt: string;
   skipEsm: boolean;
   package?: boolean;
+  copy?: boolean;
 }
 
-const defaultSwcrc = {
+const defaultSwcrc: swc.Config = {
   module: {
-    strict: true,
+    type: 'es6',
   },
   jsc: {
     target: 'es2022',
-    parser: {},
+    parser: {
+      syntax: 'typescript',
+    },
   },
 };
 
@@ -158,9 +170,11 @@ export const patchPackageJSON = async ({ name, version, description, main }: Rec
 
 export const transformCommand = async (source: string, build: string, options: TransformCommandOptions) => {
   const swcrcFilepath = isLocalFile.test(options.swcrc) ? Path.resolve(options.swcrc) : options.swcrc;
-  const swcrcConfig = await fileNotExist(swcrcFilepath) ? defaultSwcrc : await readJSON(swcrcFilepath);
-  const swcrcCJS = patchCJS(swcrcConfig, options.commonjsExt);
-  const swcrcMJS = patchMJS(swcrcConfig, options.esmExt);
+  const swcrcConfig: swc.Config = await fileNotExist(swcrcFilepath) ? defaultSwcrc : await readJSON(swcrcFilepath);
+  const visitorCJS = new ModuleVisitor(options.commonjsExt);
+  const swcrcCJS = patchCJS(swcrcConfig, visitorCJS);
+  const visitorMJS = new ModuleVisitor(options.esmExt);
+  const swcrcMJS = patchMJS(swcrcConfig, visitorMJS);
 
   const sourceDir = Path.resolve(source);
   const buildDir = Path.resolve(build);
@@ -183,16 +197,33 @@ export const transformCommand = async (source: string, build: string, options: T
   }
   if (options.package) {
     const packageJSONPath = Path.resolve('./package.json');
+    const packageJSONTargetPath = options.copy
+      ? Path.resolve(buildDir, './package.json')
+      : packageJSONPath;
+
     if (await fileNotExist(packageJSONPath)) {
       throw new Error(`File package.json not found at ${packageJSONPath}`);
     }
 
-    const { name, version, description, main, ...rest } = await readJSON(packageJSONPath);
+    const { name, version, description, main, dependencies, devDependencies, ...rest } = await readJSON(packageJSONPath);
     if (await fileNotExist(main)) {
-      throw new Error(`File ${main} not found`);
+      throw new Error(`File ${main} of "main" section in package.json not found`);
+    }
+
+    if (options.copy) {
+      const deps = { ...devDependencies, ...dependencies };
+      rest.dependencies = {};
+      for (const moduleName of visitorMJS.modules) {
+        if (deps[moduleName]) {
+          rest.dependencies[moduleName] = deps[moduleName];
+        }
+      }
+    } else {
+      rest.dependencies = dependencies;
+      rest.devDependencies = devDependencies;
     }
 
     const patchedPackageJSON = await patchPackageJSON({ name, version, description, main }, buildDir, sourceDir, sourceFiles, options);
-    await writeJSON(packageJSONPath, { ...patchedPackageJSON, ...rest });
+    await writeJSON(packageJSONTargetPath, { ...patchedPackageJSON, ...rest });
   }
 };

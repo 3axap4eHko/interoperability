@@ -1,7 +1,7 @@
 {
   "module": {
     "type": "nodenext",
-    "strict": true
+    "resolveFully": true
   },
   "jsc": {
     "target": "esnext",

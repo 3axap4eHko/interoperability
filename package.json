@@ -8,8 +8,10 @@
     "inop": "bin/inop.js"
   },
   "scripts": {
-    "build": "rm -rf build && swc ./src -d build && rm -rf build/__tests__ && tsc --declaration --emitDeclarationOnly",
-    "test": "jest"
+    "build": "rm -rf build && swc --ignore __tests__ ./src -d build && tsc --declaration --emitDeclarationOnly",
+    "test": "jest",
+    "build:example": "(cd example && npm run build)",
+    "test:example": "(cd example && npm run test)"
   },
   "engines": {
     "node": ">=16"
@@ -41,7 +43,7 @@
   ],
   "dependencies": {
     "@swc/core": "^1.3.63",
-    "commander": "^10.0.1",
+    "commander": "^11.0.0",
     "fast-glob": "^3.2.12"
   },
   "devDependencies": {
