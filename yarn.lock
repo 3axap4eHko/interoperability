@@ -805,9 +805,9 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@^20.3.1":
-  version "20.11.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.5.tgz#be10c622ca7fcaa3cf226cf80166abc31389d86e"
-  integrity sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==
+  version "20.11.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.6.tgz#6adf4241460e28be53836529c033a41985f85b6e"
+  integrity sha512-+EOokTnksGVgip2PbYbr3xnR7kZigh4LbybAfBAw5BpnQ+FqBYUsvCEjYd70IXKlbohQ64mzEYmMtlWUY8q//Q==
   dependencies:
     undici-types "~5.26.4"
 
@@ -1238,9 +1238,9 @@ diff-sequences@^29.6.3:
   integrity sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==
 
 electron-to-chromium@^1.4.601:
-  version "1.4.642"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.642.tgz#eb380fa8b58e515c641d642ba452fa2c453c2e4f"
-  integrity sha512-M4+u22ZJGpk4RY7tne6W+APkZhnnhmAH48FNl8iEFK2lEgob+U5rUQsIqQhvAwCXYpfd3H20pHK/ENsCvwTbsA==
+  version "1.4.645"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.645.tgz#117f964252eb2f0ff00fc7360cb3080e2cf66e3c"
+  integrity sha512-EeS1oQDCmnYsRDRy2zTeC336a/4LZ6WKqvSaM1jLocEk5ZuyszkQtCpsqvuvaIXGOUjwtvF6LTcS8WueibXvSw==
 
 emittery@^0.13.1:
   version "0.13.1"
