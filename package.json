@@ -8,7 +8,7 @@
     "inop": "bin/inop.js"
   },
   "scripts": {
-    "build": "rm -rf build tmp && swcx compile ./src --out-dir tmp/ && mv tmp/src/ build && rm -rf build/__tests__ && tsc --declaration --emitDeclarationOnly",
+    "build": "rm -rf build && swc ./src --out-dir build/ --strip-leading-paths && rm -rf build/__tests__ && tsc --declaration --emitDeclarationOnly",
     "test": "jest",
     "build:example": "(cd example && npm run build)",
     "test:example": "(cd example && npm run test)"
