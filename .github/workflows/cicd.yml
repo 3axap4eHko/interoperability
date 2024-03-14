@@ -5,42 +5,16 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Run CI/CD Pipeline
+        uses: zource-dev/action@v1
         with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org/
-
-      - name: Environment log
-        id: env
-        run: |
-          node --version
-          yarn --version
-
-      - name: Install dependecies
-        run: |
-          yarn
-
-      - name: Run build process
-        run: |
-          yarn build
-          yarn build:example
-
-      - name: Run testing
-        run: |
-          yarn test
-          yarn test:example
-        env:
-          COVERAGE: 1
-
-      - name: Upload test coverage
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          node_version: '20.x'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          build: |
+            pnpm build
+            pnpm build:example
+          test: |
+            pnpm test
+            pnpm test:example
