@@ -47,7 +47,7 @@
     "fast-glob": "^3.3.2"
   },
   "devDependencies": {
-    "@swc/cli": "^0.3.10",
+    "@swc/cli": "^0.3.12",
     "@swc/jest": "^0.2.36",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.2",
