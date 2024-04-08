@@ -1,5 +1,5 @@
-import { Command } from 'commander';
-import { Module } from 'module';
+import { Module } from 'node:module';
+import { Command, Option } from 'commander';
 import { transformCommand } from './utils.js';
 
 const require = Module.createRequire(import.meta.url);
@@ -14,7 +14,8 @@ commander
   .version(version)
   .argument('<source>', 'source directory')
   .argument('<build>', 'build directory')
-  .option('-m, --match <match>', 'files match pattern', '**/*.ts')
+  .addOption(new Option('-t, --type <type>', 'code type').choices(['js', 'ts']).default('ts'))
+  .option('-m, --match <match>', 'files match pattern to overwrite type', '')
   .option('-s, --swcrc <swcrc>', 'swcrc path', '.swcrc')
   .option('-i, --ignore [ignore...]', 'ignore patterns')
   .option('-p, --package', 'adjust package.json according to main property')

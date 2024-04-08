@@ -1,9 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/swcrc",
   "module": {
     "type": "nodenext",
     "resolveFully": true
   },
   "jsc": {
+    "baseUrl": ".",
     "target": "esnext",
     "parser": {
       "syntax": "typescript",

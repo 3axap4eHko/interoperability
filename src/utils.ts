@@ -1,5 +1,5 @@
-import * as Path from 'path';
-import * as Fs from 'fs/promises';
+import * as Path from 'node:path';
+import * as Fs from 'node:fs/promises';
 import * as swc from '@swc/core';
 import { Visitor } from '@swc/core/Visitor.js';
 import glob from 'fast-glob';
@@ -124,6 +124,7 @@ export const transformFile = async (sourceFile: string, destinationFile: string,
 };
 
 interface TransformCommandOptions {
+  type: string;
   match: string;
   swcrc: string;
   ignore: string[];
@@ -175,21 +176,21 @@ export const transformCommand = async (source: string, build: string, options: T
   const swcrcCJS = patchCJS(swcrcConfig, visitorCJS);
   const visitorMJS = new ModuleVisitor(options.esmExt);
   const swcrcMJS = patchMJS(swcrcConfig, visitorMJS);
-
   const sourceDir = Path.resolve(source);
   const buildDir = Path.resolve(build);
-  const sourceFiles = await glob(options.match, { ignore: options.ignore, cwd: sourceDir });
+  const match = options.match ? options.match : (options.type === 'ts' ? '**/*.ts(x)?' : '**/*.js(x)?');
+  const sourceFiles = await glob(match, { ignore: options.ignore, cwd: sourceDir });
 
   for (const filename of sourceFiles) {
     const sourceFile = `${sourceDir}/${filename}`;
     if (!options.skipEsm) {
-      const destinationFileMjs = `${buildDir}/${filename.replace(/\.ts$/, '')}${options.esmExt}`;
+      const destinationFileMjs = `${buildDir}/${filename.replace(/\.[jt]s(x)?$/, '')}${options.esmExt}`;
       await transformFile(sourceFile, destinationFileMjs, swcrcMJS).catch((e) => {
         console.error(`Error compiling ${filename} to ESM`, e)
       });
     }
     if (!options.skipCommonjs) {
-      const destinationFileCjs = `${buildDir}/${filename.replace(/\.ts$/, '')}${options.commonjsExt}`;
+      const destinationFileCjs = `${buildDir}/${filename.replace(/\.[jt]s(x)?$/, '')}${options.commonjsExt}`;
       await transformFile(sourceFile, destinationFileCjs, swcrcCJS).catch((e) => {
         console.error(`Error compiling ${filename} to CommonJS`, e)
       });

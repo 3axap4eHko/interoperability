@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 
 const swcrc = JSON.parse(readFileSync('.swcrc', 'utf-8'));
 

@@ -7,7 +7,7 @@ import {
 
 import * as Fs from 'fs/promises';
 
-jest.mock('fs/promises');
+jest.mock('node:fs/promises');
 
 describe('isLocalFile test suite', () => {
   it.each([
@@ -28,8 +28,8 @@ describe('isLocalFile test suite', () => {
 
 describe('fileNotExist test suite', () => {
   it('should check if file does not exist', async () => {
-    const access = Fs.access as jest.MockedFunction<typeof Fs.access>;
-    access.mockRejectedValue('error');
+    const access = jest.spyOn(Fs, 'access');
+    access.mockRejectedValueOnce('error');
     await expect(fileNotExist('test')).resolves.toBeTruthy();
     access.mockResolvedValue(undefined);
     await expect(fileNotExist('test')).resolves.toBeFalsy();
