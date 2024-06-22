@@ -96,8 +96,8 @@ Options:
 
 ## License
 
-License [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)
-Copyright (c) 2023-present Ivan Zakharchanka
+License [The MIT License](http://opensource.org/licenses/MIT)
+Copyright (c) 2023-2024 Ivan Zakharchanka
 
 
 [npm-url]: https://www.npmjs.com/package/inop

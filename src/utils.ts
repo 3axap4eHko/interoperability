@@ -34,7 +34,13 @@ export class ModuleVisitor extends Visitor {
   constructor(public extension: string) {
     super();
   }
-
+  visitTsPropertySignature(n: swc.TsPropertySignature) {
+    if (n.params) {
+      n.params = this.visitTsFnParameters(n.params);
+    }
+    n.typeAnnotation = this.visitTsTypeAnnotation(n.typeAnnotation);
+    return n;
+  }
   visitModuleDeclaration(decl: swc.ModuleDeclaration) {
     if ('source' in decl) {
       if (decl.source?.type === 'StringLiteral') {
