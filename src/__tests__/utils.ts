@@ -1,13 +1,30 @@
 import * as Path from 'path';
+import * as swc from '@swc/core';
 import {
   isLocalFile,
   fileNotExist,
   patchPackageJSON,
+  ModuleVisitor,
 } from '../utils';
 
 import * as Fs from 'fs/promises';
 
 jest.mock('node:fs/promises');
+
+describe('ModuleVisitor', () => {
+  it('should visit module', async () => {
+    const code = `
+import { createRequire } from 'module';
+import { asdf } from './module';
+
+`;
+    const ast = await swc.parse(code, { syntax: 'typescript' });
+    const visitor = new ModuleVisitor('.js');
+    visitor.visitProgram(ast);
+    expect([...visitor.modules.values()]).toEqual(['module']);
+    expect(ast.body[1]).toMatchObject({ source: { value: './module.js' } });
+  });
+});
 
 describe('isLocalFile test suite', () => {
   it.each([
