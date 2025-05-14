@@ -9,7 +9,8 @@
     "target": "esnext",
     "parser": {
       "syntax": "typescript",
-      "importAssertions": true
+      "importAssertions": true,
+      "importAttributes": true
     }
   },
   "sourceMaps": true

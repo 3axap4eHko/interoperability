@@ -1,8 +1,11 @@
+import { Module } from 'node:module';
 import { Command, Option } from 'commander';
 import { transformCommand } from './utils.js';
-import packageJSON from '../package.json' with { type: 'json' };
 
-const { name, description, version } = packageJSON;
+const require = Module.createRequire(import.meta.url);
+
+const { name, description, version } = require('../package.json');
+
 const commander = new Command();
 
 commander
