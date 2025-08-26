@@ -195,6 +195,7 @@ export const transformCommand = async (source: string, build: string, options: T
       });
     }
   }
+
   if (options.package) {
     const packageJSONPath = Path.resolve('./package.json');
     const packageJSONTargetPath = options.copy
