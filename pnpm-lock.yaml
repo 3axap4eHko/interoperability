@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@swc/core':
-        specifier: ^1.11.24
+        specifier: ^1.13.5
         version: 1.13.5
       commander:
         specifier: ^13.1.0
@@ -19,22 +19,22 @@ importers:
         version: 3.3.3
     devDependencies:
       '@swc/cli':
-        specifier: ^0.7.7
+        specifier: ^0.7.8
         version: 0.7.8(@swc/core@1.13.5)
       '@swc/jest':
-        specifier: ^0.2.38
+        specifier: ^0.2.39
         version: 0.2.39(@swc/core@1.13.5)
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
       '@types/node':
-        specifier: ^22.15.18
+        specifier: ^22.18.0
         version: 22.18.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.18.0)
       typescript:
-        specifier: ^5.8.3
+        specifier: ^5.9.2
         version: 5.9.2
 
 packages:
