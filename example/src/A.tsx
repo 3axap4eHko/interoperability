@@ -10,3 +10,12 @@ export class A {
     glob('*');
   }
 }
+
+export class B implements Disposable {
+  [Symbol.dispose]() { }
+}
+
+using b = new B();
+
+console.log(b);
+

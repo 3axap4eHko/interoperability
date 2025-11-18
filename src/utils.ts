@@ -34,6 +34,17 @@ export class ModuleVisitor extends Visitor {
   constructor(public extension: string) {
     super();
   }
+  visitStatement(stmt: swc.Statement): swc.Statement {
+    switch (stmt.type as unknown) {
+      case 'UsingDeclaration':
+        return this.visitUsingDeclaration(stmt);
+      default:
+        return super.visitStatement(stmt);
+    }
+  }
+  visitUsingDeclaration(stmt: swc.Statement): swc.Statement {
+    return stmt;
+  }
   visitModuleDeclaration(decl: swc.ModuleDeclaration) {
     if ('source' in decl) {
       if (decl.source?.type === 'StringLiteral') {
