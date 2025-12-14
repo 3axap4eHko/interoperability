@@ -42,7 +42,7 @@
     "interoperability"
   ],
   "dependencies": {
-    "@swc/core": "^1.15.3",
+    "@swc/core": "^1.15.4",
     "commander": "^14.0.2",
     "fast-glob": "^3.3.3"
   },
@@ -51,7 +51,7 @@
     "@swc/jest": "^0.2.39",
     "@swc/types": "^0.1.25",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.3",
+    "@types/node": "^24.10.4",
     "jest": "^30.2.0",
     "typescript": "^5.9.3"
   },
