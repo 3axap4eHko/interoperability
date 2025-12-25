@@ -154,6 +154,7 @@ const defaultSwcrc: swc.Config = {
     target: 'es2022',
     parser: {
       syntax: 'typescript',
+      tsx: true,
     },
   },
 };
