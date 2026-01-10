@@ -55,5 +55,5 @@
     "jest": "^30.2.0",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.27.0"
+  "packageManager": "pnpm@10.28.0"
 }
