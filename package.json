@@ -42,7 +42,7 @@
     "interoperability"
   ],
   "dependencies": {
-    "@swc/core": "^1.15.10",
+    "@swc/core": "^1.15.11",
     "commander": "^14.0.2",
     "fast-glob": "^3.3.3"
   },
