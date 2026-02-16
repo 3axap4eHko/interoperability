@@ -4,14 +4,14 @@ import {
   isLocalFile,
   fileNotExist,
   patchPackageJSON,
-  ModuleVisitor,
+  visitModule,
 } from '../utils';
 
 import * as Fs from 'fs/promises';
 
 jest.mock('node:fs/promises');
 
-describe('ModuleVisitor', () => {
+describe('visitModule', () => {
   it('should visit module', async () => {
     const code = `
 import { createRequire } from 'module';
@@ -19,10 +19,20 @@ import { asdf } from './module';
 
 `;
     const ast = await swc.parse(code, { syntax: 'typescript' });
-    const visitor = new ModuleVisitor('.js');
-    visitor.visitProgram(ast);
-    expect([...visitor.modules.values()]).toEqual(['module']);
+    const modules = new Set<string>();
+    visitModule(ast, '.js', modules);
+    expect([...modules.values()]).toEqual(['module']);
     expect(ast.body[1]).toMatchObject({ source: { value: './module.js' } });
+  });
+
+  it('should parse generics in .ts files without treating them as JSX', async () => {
+    const code = `export const fn = <R = unknown>(arg: R): R => arg;`;
+    await expect(swc.parse(code, { syntax: 'typescript', tsx: true })).rejects.toThrow();
+    const ast = await swc.parse(code, { syntax: 'typescript', tsx: false });
+    const modules = new Set<string>();
+    visitModule(ast, '.js', modules);
+    expect(ast.body).toHaveLength(1);
+    expect(ast.body[0].type).toBe('ExportDeclaration');
   });
 });
 

@@ -27,3 +27,4 @@ commander
   .action(transformCommand);
 
   commander.parse(process.argv);
+
