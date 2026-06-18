@@ -42,18 +42,18 @@
     "interoperability"
   ],
   "dependencies": {
-    "@swc/core": "^1.15.21",
-    "commander": "^14.0.3",
+    "@swc/core": "^1.15.41",
+    "commander": "^15.0.0",
     "fast-glob": "^3.3.3"
   },
   "devDependencies": {
-    "@swc/cli": "^0.8.0",
+    "@swc/cli": "^0.8.1",
     "@swc/jest": "^0.2.39",
-    "@swc/types": "^0.1.26",
+    "@swc/types": "^0.1.27",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.5.0",
-    "jest": "^30.3.0",
-    "typescript": "^6.0.2"
+    "@types/node": "^25.9.3",
+    "jest": "^30.4.2",
+    "typescript": "^6.0.3"
   },
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+  "packageManager": "pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620"
 }
