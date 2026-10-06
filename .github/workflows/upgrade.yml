@@ -8,16 +8,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Run CI/CD Pipeline
-        uses: zource-dev/action@v1
+        uses: zource-dev/action@534b3ad1eb0dec5b64c4bd20be9febf0336594b6
         with:
-          node_version: '24.x'
+          node_version: '24.21.0'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           autoupdate: minor
           username: Ivan Zakharchanka
           email: 3axap4eHko@github.com
-          npm_token: ${{ secrets.NPM_TOKEN }}
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
           build: |
             pnpm build
